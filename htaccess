@@ -1,0 +1,163 @@
+DirectoryIndex /index.php
+
+<Files .htaccess>
+order allow,deny
+deny from all
+</Files>
+
+ErrorDocument 400 /400.php
+ErrorDocument 401 /401.php
+ErrorDocument 403 /403.php
+ErrorDocument 404 /404.php
+ErrorDocument 500 /500.html
+
+Options +FollowSymLinks
+RewriteEngine on
+
+#Add www to page properly activities.tjhsst.edu/chemsoc#
+rewriteCond %{HTTP_HOST} ^activities.tjhsst.edu/chemsoc [NC]
+rewriteRule ^(.*)$ http://www.activities.tjhsst.edu/chemsoc/$1 [R=301,L]
+
+<FilesMatch "\.(ttf|otf|woff)$">
+<IfModule mod_headers.c>
+        Header set Access-Control-Allow-Origin "*"
+</IfModule>
+</FilesMatch>
+
+#Error Pages URLs#
+RewriteRule ^400error$ /400.php
+RewriteRule ^401error$ /401.php
+RewriteRule ^403error$ /403.php
+RewriteRule ^404error$ /404.php
+RewriteRule ^500error$ /500.html
+
+#Redirect Pages#
+#RedirectMatch 301 ^/forgot_password$ /reset_password
+#RedirectMatch 301 ^/login$ /welcome
+#RedirectMatch 301 ^/register$ /welcome
+#RedirectMatch 301 ^/blog/2013/04/nazca-line/$ http://blog.artzoco.com
+#RedirectMatch 301 ^/lang?code=1$ http://en.artzoco.com
+#RedirectMatch 301 ^/lang?code=2$ http://es.artzoco.com
+#RedirectMatch 301 ^/lang?code=3$ http://ru.artzoco.com
+
+#Admin#
+#RewriteRule ^admin/api/shops$ /app/controllers/api_controller.php [L,QSA]
+#RewriteRule ^admin/api/dashboard$ /app/controllers/api_controller.php [L,QSA]
+#RewriteRule ^admin/api/shops/([0-9]+)/activate /app/controllers/api_controller.php [L,QSA]
+#RewriteRule ^admin/api/shops/([0-9]+)/deactivate /app/controllers/api_controller.php [L,QSA]
+#RewriteRule ^admin/api/orders$ /app/controllers/api_controller.php [L,QSA]
+
+#Utilities#
+#RewriteRule ^random_string$ /app/controllers/static_controller.php [L,QSA]
+#RewriteRule ^upgrade_browser$ /app/controllers/static_controller.php [L,QSA]
+#RewriteRule ^admin/send_emails$ /app/cron/automated_email.php [L,QSA]
+
+#Resources#
+#RewriteRule ^show_products$ /app/controllers/users_controller.php [L,QSA]
+#RewriteRule ^activate$ /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^users$ /app/controllers/users_controller.php [L,QSA]
+#RewriteRule ^user/([0-9]+)$ /app/controllers/users_controller.php [L,QSA]
+#RewriteRule ^user/([0-9]+)\.json$ /app/controllers/users_controller.php [L,QSA]
+#RewriteRule ^user_by_email$ /app/controllers/users_controller.php [L,QSA]
+#RewriteRule ^wishlist_two$ /app/controllers/wishlists_controller.php [L,QSA]
+#RewriteRule ^wishlists$ /app/controllers/wishlists_controller.php [L,QSA]
+#RewriteRule ^wishlist/([0-9]+)$ /app/controllers/wishlists_controller.php [L,QSA]
+#RewriteRule ^sellers$ /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)$ /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)/$ /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)\.json$ /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)/products\.json$  /app/controllers/products_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)/transactions\.json$  /app/controllers/transactions_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)/([^/]+)$  /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)/([^/]+)/$  /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^products$ /app/controllers/products_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)/([^/]+)/product/([0-9]+)$ /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)/([^/]+)/product/([0-9]+)/$ /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)/([^/]+)/product/([0-9]+)/([^/]+)$  /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^seller/([0-9]+)/([^/]+)/product/([0-9]+)/([^/]+)/$  /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^product/([0-9]+)$ /app/controllers/products_controller.php [L,QSA]
+#RewriteRule ^product/([0-9]+)/$ /app/controllers/products_controller.php [L,QSA]
+#RewriteRule ^product/([0-9]+)\.json$ /app/controllers/products_controller.php [L,QSA]
+#RewriteRule ^product/([0-9]+)/([^/]+)$  /app/controllers/products_controller.php [L,QSA]
+#RewriteRule ^product/([0-9]+)/([^/]+)/$  /app/controllers/products_controller.php [L,QSA]
+#RewriteRule ^country/([0-9]+)\.json$ /app/controllers/country_types_controller.php [L,QSA]
+#RewriteRule ^language/([0-9]+)\.json$ /app/controllers/language_types_controller.php [L,QSA]
+#RewriteRule ^product_type/([0-9]+)\.json$ /app/controllers/product_types_controller.php [L,QSA]
+#RewriteRule ^shipping_rate/([0-9]+)\.json$ /app/controllers/shipping_rates_controller.php [L,QSA]
+#RewriteRule ^orders$ /app/controllers/orders_controller.php [L,QSA]
+RewriteRule ^receiver$ /text_controller.php [L,QSA]
+RewriteRule ^send$ /text_controller.php [L,QSA]
+RewriteRule ^getID$ /text_controller.php [L,QSA]
+#RewriteRule ^transactions\.json$  /app/controllers/transactions_controller.php [L,QSA]
+#RewriteRule ^analytics$ /app/controllers/analytics_controller.php [L,QSA]
+
+#Product Tags#
+#RewriteRule ^producttags$  /app/controllers/tag_references_controller.php [L,QSA]
+
+#Search#
+#RewriteRule ^search /app/controllers/static_controller.php [L,QSA]
+#RewriteRule ^findtag /app/controllers/tag_types_controller.php [L,QSA]
+#RewriteRule ^tagdata/([^/]+)\.json$ /app/controllers/tag_types_controller.php [L,QSA]
+
+#Uploads#
+#RewriteRule ^s3_redirect$ /app/controllers/images_controller.php [L,QSA]
+#RewriteRule ^images$ /app/controllers/images_controller.php [L,QSA]
+
+#Countries page#
+#RewriteRule ^countries$ /app/controllers/static_controller.php [L,QSA]
+
+#Welcome page#
+#RewriteRule ^welcome$ /app/controllers/static_controller.php [L,QSA]
+#RewriteRule ^more_categories$ /app/controllers/static_controller.php [L,QSA]
+
+#About page#
+#RewriteRule ^about$ /app/controllers/static_controller.php [L,QSA]
+
+#Jobs page#
+#RewriteRule ^jobs$ /app/controllers/static_controller.php [L,QSA]
+
+#Terms page#
+#RewriteRule ^terms$ /app/controllers/static_controller.php [L,QSA]
+
+#Privacy Page#
+#RewriteRule ^privacy$  /app/controllers/static_controller.php [L,QSA]
+
+#Payments Page#
+#RewriteRule ^payment$ /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^verify_paypal$ /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^verify_payoneer$ /app/controllers/sellers_controller.php [L,QSA]
+#RewriteRule ^request_withdraw$ /app/controllers/transactions_controller.php [L,QSA]
+#RewriteRule ^payoneer_funds$ /app/controllers/transactions_controller.php [L,QSA]
+#RewriteRule ^paypal_funds$ /app/controllers/transactions_controller.php [L,QSA]
+
+#Login & Logout pages#
+#RewriteRule ^login/admin_login$ /app/controllers/login_controller.php [L,QSA]
+#RewriteRule ^login/web_login$ /app/controllers/login_controller.php [L,QSA]
+#RewriteRule ^login/login_mobile$ /app/controllers/login_controller.php [L,QSA]
+#RewriteRule ^login/fb_login$ /app/controllers/login_controller.php [L,QSA]
+#RewriteRule ^logout$ /app/controllers/login_controller.php [L,QSA]
+#RewriteRule ^reset_password$ /app/controllers/users_controller.php [L,QSA]
+#RewriteRule ^change_password$ /app/controllers/login_controller.php [L,QSA]
+
+#Verifying email address#
+#RewriteRule ^verify_account$   /app/controllers/users_controller.php [L,QSA]
+
+#Checkout page#
+#RewriteRule ^checkout$  /app/controllers/static_controller.php [L,QSA]
+#RewriteRule ^wish$  /app/controllers/users_controller.php [L,QSA]
+#RewriteRule ^thankyou$  /app/controllers/static_controller.php [L,QSA]
+#RewriteRule ^mysale$  /app/controllers/sellers_controller.php [L,QSA]
+
+#Orders page#
+#RewriteRule ^ibought$ /app/controllers/users_controller.php [L,QSA]
+
+#Admin pages#
+#RewriteRule ^admin/migrate$ /app/views/migrate.php [L,QSA]
+#RewriteRule ^migrate$ /db/migrate.php [L,QSA]
+
+#Add .php on all files#
+RewriteCond %{REQUEST_FILENAME} !-d 
+RewriteCond %{REQUEST_FILENAME}\.php -f 
+RewriteRule ^(.*)$ $1.php
+
+php_value post_max_size 100M
