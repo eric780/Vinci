@@ -28,74 +28,72 @@
         </form>
     </div>
 
-
+<script src="/socket.io/socket.io.js"></script>
 <script type="text/javascript">
 	$(document).ready(function(){
 
 		var location = navigator.geolocation;               //get geolocation
 		location.getCurrentPosition(success, failure);
-		var mylat;
-		var mylong;
+		var mycoord = {lat:Number.MAX_VALUE, long:Number.MAX_VALUE};
 		function success(position){
-			mylat = position.coords.latitude;
-			mylong = position.coords.longitude;
+			mycoord.lat = position.coords.latitude;
+			mycoord.long = position.coords.longitude;
 		}
 		function failure(){
 			alert("Geolocation not enabled");
 		}
+
 		
 		$('#messagetxt').keypress(function(e){
 			if(e.which==13){
 			e.preventDefault();
 			$('#message').submit();
 		}});
-	});
-</script>
+	
 
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io();
+	  var socket = io();
 
-  //retrieves userID from localstorage, if exists.
-  //If not yet set, sets it to user-specified username
-  var getUserID = function(){
-  	var id = localStorage.getItem("userid");
-  	if(id){
-  		return id;
-  	}
-  	else{
-  		id = $('#nickname').val();
-  		localStorage.setItem("userid", id);
-  		return id;
-  	}
+	  //retrieves userID from localstorage, if exists.
+	  //If not yet set, sets it to user-specified username
+	  var getUserID = function(){
+	  	var id = localStorage.getItem("userid");
+	  	if(id){
+	  		return id;
+	  	}
+	  	else{
+	  		id = $('#nickname').val();
+	  		localStorage.setItem("userid", id);
+	  		return id;
+	  	}
 
-  }
+	  }
 
-  //message submitted
-  $('#message').submit(function(){
-  	var text = $('#messagetxt').val();
-  	var nickname = $('#nickname').val();
-  	//send message with sender field as user-specified nickname (at top)
-  	socket.emit('chat message', {sender:nickname, contents:text});
+	  //message submitted
+	  $('#message').submit(function(){
+	  	var text = $('#messagetxt').val();
+	  	var nickname = $('#nickname').val();
+	  	//send message with sender field as user-specified nickname (at top)
+	  	socket.emit('chat message', {sender:nickname, contents:text, coord:mycoord});
 
-  	//clear text box
-  	$('#messagetxt').val('');
+	  	//clear text box
+	  	$('#messagetxt').val('');
 
-  	//add text to messagebox, class indicates that you sent it
-  	$('#messages').append($('<li class="mymessage">').text(nickname + " (you): " + text));
+	  	//add text to messagebox, class indicates that you sent it
+	  	$('#messages').append($('<li class="mymessage">').text(nickname + " (you): " + text));
 
-  	//disable form default action
-  	return false;
-  })
+	  	//disable form default action
+	  	return false;
+	  })
 
-  //message received
-  socket.on('chat message', function(data){
-  	//append message to box
-    $('#messages').append($('<li>').text(data.sender + ": " + data.contents));
+	  //message received
+	  socket.on('chat message', function(data){
+	  	//append message to box
+	    $('#messages').append($('<li>').text(data.sender + ": " + data.contents));
 
-    //autoscroll to bottom
-    var chatbox = document.getElementById("chatbox");
-    chatbox.scrollTop = chatbox.scrollHeight;
+	    //autoscroll to bottom
+	    var chatbox = document.getElementById("chatbox");
+	    chatbox.scrollTop = chatbox.scrollHeight;
+	  });
   });
 
 </script>

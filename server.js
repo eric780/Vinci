@@ -23,7 +23,7 @@ io.on('connection', function(socket){
 	}
 	*/
 	socket.on('chat message', function(data){
-		console.log('message from ' + data.sender + ' : ' + data.contents);
+		console.log('message from ' + data.sender + ' at ' + JSON.stringify(data.coord) + ' : ' + data.contents);
 
 		//broadcast message to everyone but the user who sent it
 		socket.broadcast.emit('chat message', {sender: data.sender, contents:data.contents});
@@ -33,7 +33,6 @@ io.on('connection', function(socket){
     	console.log('user disconnected');
  	});
 });
-
 
 http.listen(process.env.PORT || 3000, function(){
 	console.log('listening on port 3000');
