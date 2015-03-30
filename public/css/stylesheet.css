@@ -26,15 +26,22 @@ form, p, span {
     margin-bottom:25px;
     padding:10px;
     background:#fff;
-    height:500px;
+    height:400px;
     width:600px;
     border:1px solid #ACD8F0;
     overflow:auto;
+}
+#chatbox ul{
+    list-style-type:none;
 }
 
 #messagetxt {
     width:395px;
     border:1px solid #ACD8F0;
+}
+/*messages that this user has sent*/
+.mymessage{
+    color:blue;
 }
   
 #submit { width: 60px; }

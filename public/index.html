@@ -31,11 +31,9 @@
 
 <script type="text/javascript">
 	$(document).ready(function(){
-		var user_chat_index;
-		
 
-		var x = navigator.geolocation;               //get geolocation
-		x.getCurrentPosition(success, failure);
+		var location = navigator.geolocation;               //get geolocation
+		location.getCurrentPosition(success, failure);
 		var mylat;
 		var mylong;
 		function success(position){
@@ -46,6 +44,67 @@
 			alert("Geolocation not enabled");
 		}
 		
+		$('#messagetxt').keypress(function(e){
+			if(e.which==13){
+			e.preventDefault();
+			$('#message').submit();
+		}});
+	});
+</script>
+
+<script src="/socket.io/socket.io.js"></script>
+<script>
+  var socket = io();
+
+  //retrieves userID from localstorage, if exists.
+  //If not yet set, sets it to user-specified username
+  var getUserID = function(){
+  	var id = localStorage.getItem("userid");
+  	if(id){
+  		return id;
+  	}
+  	else{
+  		id = $('#nickname').val();
+  		localStorage.setItem("userid", id);
+  		return id;
+  	}
+
+  }
+
+  //message submitted
+  $('#message').submit(function(){
+  	var text = $('#messagetxt').val();
+  	var nickname = $('#nickname').val();
+  	//send message with sender field as user-specified nickname (at top)
+  	socket.emit('chat message', {sender:nickname, contents:text});
+
+  	//clear text box
+  	$('#messagetxt').val('');
+
+  	//add text to messagebox, class indicates that you sent it
+  	$('#messages').append($('<li class="mymessage">').text(nickname + " (you): " + text));
+
+  	//disable form default action
+  	return false;
+  })
+
+  //message received
+  socket.on('chat message', function(data){
+  	//append message to box
+    $('#messages').append($('<li>').text(data.sender + ": " + data.contents));
+
+    //autoscroll to bottom
+    var chatbox = document.getElementById("chatbox");
+    chatbox.scrollTop = chatbox.scrollHeight;
+  });
+
+</script>
+
+
+<script>
+/*
+====================================DEPRECIATED CODE===========================================
+*/
 		/*var myid;
 		$.ajax({                                    //obtain unique user id
 			type: "GET",
@@ -53,20 +112,12 @@
 			success: setID
 			}
 		);*/
+/*
 		
 		function setID(response){
 			myid = $.parseJSON(response).id;
 			user_chat_index = $.parseJSON(response).chat_index;
 		}
-
-
-
-		$('#messagetxt').keypress(function(e){
-			if(e.which==13){
-			e.preventDefault();
-			$('#message').submit();
-		}});
-
 
 		function updateChat(){
 			console.log("HELLO2");
@@ -94,6 +145,7 @@
 				}
 			})
 		}
+		*/
 
 		/*setInterval(function(){
 			console.log("HELLO");
@@ -118,22 +170,6 @@
 			updateChat();
 
 		});*/
-
-	});
-</script>
-
-<script src="/socket.io/socket.io.js"></script>
-<script>
-  var socket = io();
-  $('#message').submit(function(){
-  	socket.emit('chat message', $('#messagetxt').val());
-  	$('#messagetxt').val('');
-  	return false;
-  })
-
-  socket.on('chat message', function(msg){
-    $('#messages').append($('<li>').text(msg));
-  });
 </script>
 </body>
 </html>
